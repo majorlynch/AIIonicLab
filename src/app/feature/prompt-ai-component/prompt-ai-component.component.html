@@ -1,0 +1,77 @@
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col sizeMd="6" offsetMd="3">
+        <ion-card>
+          <ion-card-header color="light">
+            <ion-card-title>Compare AI Responses</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-label position="stacked">Prompt</ion-label>
+              <ion-input
+                [(ngModel)]="prompt"
+                (keyup.enter)="getResponse()"
+                placeholder="Enter your prompt"
+              ></ion-input>
+            </ion-item>
+
+            <ion-button
+              expand="block"
+              (click)="getResponse()"
+              [disabled]="isLoadingDeepseek || isLoadingDeepseek"
+            >
+              Submit
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin-top" justify-content-center>
+      <ion-col size="12" sizeMd="3" *ngIf="featureFlags.Gemini">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <img class="aiImage" src="/assets/images/gemini.png" />
+              Gemini AI Response <span class="fs-3">{{medalArray[geminiPosition]}}</span>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ng-container *ngIf="!isLoadingGemini; else loadingGemini">
+              <ion-label *ngIf="!aiGeminiResponse">Response</ion-label>
+              <p [innerHTML]="aiGeminiResponse" style="white-space: pre-wrap;"></p>
+            </ng-container>
+            <ng-template #loadingGemini>
+              <ion-spinner name="crescent"></ion-spinner>
+            </ng-template>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Repeat the same block with DeepSeek, ChatGPT, Mistral -->
+
+      <ion-col size="12" sizeMd="3" *ngIf="featureFlags.Deepseek">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <img class="aiImage" src="/assets/images/deepseek.png" />
+              DeepSeek AI Response <span class="fs-3">{{medalArray[deepseekPosition]}}</span>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ng-container *ngIf="!isLoadingDeepseek; else loadingDeepseek">
+              <ion-label *ngIf="!aiDeepSeekResponse">Response</ion-label>
+              <p [innerHTML]="aiDeepSeekResponse" style="white-space: pre-wrap;"></p>
+            </ng-container>
+            <ng-template #loadingDeepseek>
+              <ion-spinner name="crescent"></ion-spinner>
+            </ng-template>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Continue with ChatGPT and Mistral in the same format -->
+    </ion-row>
+  </ion-grid>
+</ion-content>
