@@ -1,0 +1,7 @@
+{
+  "name": "aiioniclab",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
