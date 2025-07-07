@@ -14,12 +14,12 @@ export const routes: Routes = [
       {
         path: 'tab2',
         loadComponent: () =>
-          import('../feature/prompt-ai-component/prompt-ai-component.component').then((m) => m.PromptAiComponentComponent),
+          import('../feature/prompt-ai/prompt-ai-component.component').then((m) => m.PromptAiComponentComponent),
       },
       {
         path: 'tab3',
         loadComponent: () =>
-          import('../feature/image-read-ai-component/image-read-ai-component.component').then((m) => m.ImageReadAiComponentComponent),
+          import('../feature/image-read-ai/image-read-ai-component.component').then((m) => m.ImageReadAiComponentComponent),
       },
       {
         path: '',
