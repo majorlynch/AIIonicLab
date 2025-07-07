@@ -1,8 +1,7 @@
-import { Mistral } from '@mistralai/mistralai';
+import { ApiKeysService } from './api-keys.service';
 import { FeatureFlagService } from 'src/app/core/services/feature-flag.service';
-import { Injectable } from '@angular/core';
-import { environment } from '@environment/environment';
-import { of, from, Observable, throwError } from 'rxjs';
+import { Injectable, OnInit } from '@angular/core';
+import { of, from, Observable } from 'rxjs';
 import { createPartFromBase64, createUserContent, GenerateContentResponse, GoogleGenAI } from '@google/genai';
 import {
   aiDetail,
@@ -12,7 +11,8 @@ import {
 } from '@models/chat.models';
 import { OpenAI } from 'openai';
 import { MockChatService } from './mocks/mock-chat-service';
-import { AI_NAMES } from '@enums/ainame.enum';
+import { AI_NAMES, AI_KEYS } from '@enums/ainame.enum';
+import { Mistral } from '@mistralai/mistralai';
 
 @Injectable({
   providedIn: 'root',
@@ -20,31 +20,58 @@ import { AI_NAMES } from '@enums/ainame.enum';
 export class ChatService {
   docs: any;
   response: any;
+  apiKeyGemini: string = '';
+  apiKeyDeepSeek: string = '';
+  apiKeyMistral: string = '';
+  apiKeyChatGPT: string = '';
 
   //Gemini
-  ai = new GoogleGenAI({
-    apiKey: environment.apiKeyGemini,
-  });
+  ai: GoogleGenAI | null = null;
 
   //Deepseek
-  openai = new OpenAI({
-    baseURL: 'https://api.deepseek.com',
-    dangerouslyAllowBrowser: true,
-    apiKey: environment.apiKeyDeepSeek,
-  });
+  openai: OpenAI | null = null;
 
   //Mistral
-  mistralClient = new Mistral({apiKey: environment.apiKeyMistral});
-
+  mistralClient:  Mistral | null = null;
 
   constructor(private featureFlagService: FeatureFlagService,
-              private mockChatService: MockChatService){
+    private apiKeysService: ApiKeysService,
+    private mockChatService: MockChatService) {
+    this.apiKeysService.getApiKeys().subscribe(keys => {
+      if (keys) {
+        this.apiKeyGemini = keys[AI_KEYS.GEMINI];
+        this.apiKeyDeepSeek = keys[AI_KEYS.DEEPSEEK];
+        this.apiKeyMistral = keys[AI_KEYS.MISTRAL];
+        this.apiKeyChatGPT = keys[AI_KEYS.CHATGPT];
+
+        //Gemini
+        this.ai = new GoogleGenAI({
+          apiKey: this.apiKeyGemini,
+        });
+
+        //DeepSeek
+        this.openai = new OpenAI({
+          baseURL: 'https://api.deepseek.com',
+          dangerouslyAllowBrowser: true,
+          apiKey: this.apiKeyDeepSeek,
+        });
+
+        //Mistral
+        this.mistralClient = new Mistral({ apiKey: this.apiKeyMistral });
+      }
+    });
   }
+
   async getGeminiChatPromise(
     chatPrompt: string,
     userHistory: TextPrompt[],
     aiHistory: TextPrompt[]
   ): Promise<string> {
+    if (!this.ai) {
+      console.log('Gemini AI not set');
+      return '';
+    }
+
     const chat = this.ai.chats.create({
       model: 'gemini-2.0-flash',
       history: [
@@ -71,39 +98,46 @@ export class ChatService {
     aiHistory: TextPrompt[],
     returnMockText?: boolean
   ): Observable<string> {
-    if (!returnMockText)
-    {
+    if (!returnMockText) {
       return from(
         this.getGeminiChatPromise(chatPrompt, userHistory, aiHistory)
       );
     }
-    else
-     {
+    else {
       return from(
         this.mockChatService.getMockResponse()
       );
-     }
+    }
   }
 
   async getGeminiImageReadPromise(imageContent: string, imageQuestion: string): Promise<string | undefined> {
-    const response : GenerateContentResponse = await this.ai.models.generateContent({
-    model: "gemini-2.0-flash",
-    contents: [
-      createUserContent([
-        imageQuestion,
-        createPartFromBase64(imageContent, 'image/png'),
-      ]),
-    ]});
-    return response.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!this.ai) {
+      console.log('Gemini AI not set');
+      return '';
+    }
+      const response: GenerateContentResponse = await this.ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: [
+          createUserContent([
+            imageQuestion,
+            createPartFromBase64(imageContent, 'image/png'),
+          ]),
+        ]
+      });
+      return response.candidates?.[0]?.content?.parts?.[0]?.text;
   }
 
-  getGeminiImageRead(imageContent: string, imageQuestion: string): Observable<string | undefined>{
-     return from(this.getGeminiImageReadPromise(imageContent, imageQuestion));
+  getGeminiImageRead(imageContent: string, imageQuestion: string): Observable<string | undefined> {
+    return from(this.getGeminiImageReadPromise(imageContent, imageQuestion));
   }
 
 
   async getDeepseekChatPromise(chatPrompt: string, chatHistory: ChatHistory[]
   ): Promise<string> {
+    if (!this.openai) {
+      console.log('Deepseek ai not set');
+      return '';
+    }
     chatHistory.push({ role: 'user', content: chatPrompt });
     const completion = await this.openai.chat.completions.create({
       model: 'deepseek-chat',
@@ -118,23 +152,26 @@ export class ChatService {
     if (!returnMockText)
       return from(this.getDeepseekChatPromise(chatPrompt, chatHistory));
     else
-     return this.mockChatService.getMockResponse()
+      return this.mockChatService.getMockResponse()
   }
 
   async getMistralChatPromise(chatPrompt: string, chatHistory: ChatHistory[]
-  ): Promise<string>
-  {
+  ): Promise<string> {
+    if (!this.mistralClient) {
+      console.log('Mistral ai not set');
+      return '';
+    }
     let response: string = '';
     const result = await this.mistralClient.chat.stream({
-        model: "mistral-large-latest",
-        messages: chatHistory as any,
+      model: "mistral-large-latest",
+      messages: chatHistory as any,
     });
 
     for await (const chunk of result) {
-        let streamText = chunk.data.choices[0].delta.content;
-        if (typeof streamText === "string") {
-            response += streamText;
-        }
+      let streamText = chunk.data.choices[0].delta.content;
+      if (typeof streamText === "string") {
+        response += streamText;
+      }
     }
     return response;
   }
@@ -144,7 +181,7 @@ export class ChatService {
     if (!returnMockText)
       return from(this.getMistralChatPromise(chatPrompt, chatHistory));
     else
-     return this.mockChatService.getMockResponse()
+      return this.mockChatService.getMockResponse()
   }
 
   getContactData(): Observable<aiDetail[]> {
@@ -173,7 +210,7 @@ export class ChatService {
         aiOnlineStatus: 'online',
         featured: this.featureFlagService.getFlag(AI_NAMES.MISTRAL)
       },
-    ].filter(r => {return r.featured == true}));
+    ].filter(r => { return r.featured == true }));
   }
 
   getMessages(): Observable<MessageDetail[]> {

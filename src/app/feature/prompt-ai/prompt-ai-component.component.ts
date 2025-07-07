@@ -8,9 +8,6 @@ import {
   IonGrid,
   IonCol,
   IonRow,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonItem,
   IonLabel,
   IonContent,
@@ -23,7 +20,6 @@ import {
   IonSpinner
 } from '@ionic/angular/standalone';
 import { formatResponse } from '@utils/format-response.util';
-import { ExploreContainerComponent } from 'src/app/explore-container/explore-container.component';
 import { FeatureFlagService } from '@services/feature-flag.service';
 import { PromptService } from '@services/prompt-ai.service';
 
@@ -43,17 +39,13 @@ import { PromptService } from '@services/prompt-ai.service';
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonItem,
     IonLabel,
     IonContent,
     IonSpinner,
-    ExploreContainerComponent,
   ],
 })
-export class PromptAiComponentComponent implements OnInit {
+export class PromptAiComponent implements OnInit {
   prompt: string = '';
   aiGeminiResponse: string = '';
   aiDeepSeekResponse: string = '';

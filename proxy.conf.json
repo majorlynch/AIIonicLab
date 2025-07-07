@@ -1,0 +1,23 @@
+{
+  "/ailab/apikey": {
+    "target": "https://madebyconor.com/ailab/apikey",
+    "secure": true,
+    "changeOrigin": true
+  },
+  "/api1": {
+    "target": "https://generativeai.googleapis.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    }
+  },
+  "/api2": {
+    "target": "https://api.deepseek.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/chat": ""
+    }
+  }
+}

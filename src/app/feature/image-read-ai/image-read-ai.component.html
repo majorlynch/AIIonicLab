@@ -1,0 +1,100 @@
+<ion-content>
+  <ion-grid>
+
+    <!-- Step 1 - Load Image -->
+    <ion-row>
+      <ion-col size="12" size-md="6" class="ion-margin-auto ion-padding">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Step 1 - Load Image</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <!--<input type="file" (change)="onFileSelected($event)" accept="image/*" />-->
+         <ion-item>
+            <ion-button expand="rounded" (click)="f.click()">
+              <ion-icon lazy="true" slot="start" name="image"></ion-icon>
+              <ion-label slot="end">Choose File</ion-label>
+            </ion-button>
+              <input class="ion-hide" #f type="file" (change)="onFileSelected($event)" id="file-input"
+                accept="image/png, image/jpeg">
+
+         </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Image Preview -->
+    <ion-row>
+      <ion-col size="12" size-md="6" class="ion-margin-auto ion-padding">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Image Preview</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-img *ngIf="imageSrc" [src]="imageSrc" alt="Image Preview" class="ion-text-center"></ion-img>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Step 2 - Ask Question -->
+    <ion-row>
+      <ion-col size="12" size-md="6" class="ion-margin-auto ion-padding">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Step 2 - Ask Question</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-input
+                [(ngModel)]="imageQuestion"
+                placeholder="Ask a question"
+                (keydown.enter)="sendMessage()"
+                ngDefaultControl
+              ></ion-input>
+              <ion-button
+                id="sendMessageButton"
+                fill="outline"
+                shape="round"
+                slot="end"
+                (click)="sendMessage()"
+                [disabled]="isLoading"
+              >
+                <ion-icon name="send-outline"></ion-icon>
+              </ion-button>
+            </ion-item>
+
+            <!-- Suggested Prompts -->
+            <div class="ion-padding-top">
+              <ion-chip
+                *ngFor="let prompt of samplePrompts"
+                (click)="setSuggestedMessage(prompt)"
+                color="primary"
+              >
+                {{ prompt }}
+              </ion-chip>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Response -->
+    <ion-row>
+      <ion-col size="12" size-md="6" class="ion-margin-auto ion-padding">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Response</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div [innerHTML]="responseText" style="white-space: pre-wrap"></div>
+
+            <ion-spinner *ngIf="isLoading" name="dots"></ion-spinner>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>

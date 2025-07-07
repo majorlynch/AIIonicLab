@@ -4,13 +4,14 @@ import { CommonModule } from "@angular/common";
 import { aiDetail } from "../../../shared/models/chat.models";
 import { FeatureFlagService } from "src/app/core/services/feature-flag.service";
 import { finalize } from "rxjs";
+import { IonIcon, IonList, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonAvatar, IonLabel, IonImg } from "@ionic/angular/standalone";
 
 @Component( {
     selector: 'app-chat-contacts',
     templateUrl: './chat-contacts.html',
     styleUrl: './chat-contacts.css',
     standalone: true,
-    imports: [CommonModule]
+    imports: [IonImg, IonItem, CommonModule, IonList, IonIcon, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonAvatar, IonLabel, IonImg ]
 })
 
 export class ChatAiContacts implements OnInit {

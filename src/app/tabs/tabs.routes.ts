@@ -1,3 +1,4 @@
+import { ChatAiComponent } from './../feature/chat-ai/chat-ai.component';
 import { Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
 
@@ -7,30 +8,30 @@ export const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'chat',
         loadComponent: () =>
-          import('../feature/chat-ai-component/chat-ai-component.component').then((m) => m.ChatAiComponent),
+          import('../feature/chat-ai/chat-ai.component').then((m) => m.ChatAiComponent),
       },
       {
-        path: 'tab2',
+        path: 'prompt',
         loadComponent: () =>
-          import('../feature/prompt-ai/prompt-ai-component.component').then((m) => m.PromptAiComponentComponent),
+          import('../feature/prompt-ai/prompt-ai-component.component').then((m) => m.PromptAiComponent),
       },
       {
-        path: 'tab3',
+        path: 'imageread',
         loadComponent: () =>
-          import('../feature/image-read-ai/image-read-ai-component.component').then((m) => m.ImageReadAiComponentComponent),
+          import('../feature/image-read-ai/image-read-ai.component').then((m) => m.ImageReadAiComponent),
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/chat',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/chat',
     pathMatch: 'full',
   },
 ];

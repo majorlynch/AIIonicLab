@@ -15,11 +15,12 @@ import { AI_NAMES } from 'src/app/shared/enums/ainame.enum';
 import { formatResponse } from '@utils/format-response.util';
 import { LogService } from 'src/app/core/services/log-service.service';
 import { FeatureFlagService } from 'src/app/core/services/feature-flag.service';
+import { IonContent, IonImg, IonGrid, IonRow, IonCol, IonSpinner, IonAlert, IonText } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-chat-ai',
   standalone: true,
-  imports: [ChatAiContacts, ChatInputComponent, CommonModule],
+  imports: [ChatAiContacts, ChatInputComponent, CommonModule, ChatInputComponent, IonGrid, IonRow, IonCol, IonSpinner, IonImg, IonContent, IonAlert, IonText ],
   templateUrl: './chat-ai.component.html',
   styleUrl: './chat-ai.component.css',
   encapsulation: ViewEncapsulation.Emulated,

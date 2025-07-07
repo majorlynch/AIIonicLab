@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CHATSYMBOLGROUPS } from '@constants/chatSymbols';
+import { IonItem, IonTextarea, IonSelect, IonSelectOption, IonButton, IonIcon } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-chat-input',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [IonIcon, IonButton, CommonModule, FormsModule, IonItem, IonTextarea, IonSelect, IonSelectOption],
   templateUrl: './chat-input.component.html',
   styleUrl: './chat-input.component.css'
 })

@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { PromptAiComponentComponent } from './prompt-ai-component.component';
+import { PromptAiComponent } from './prompt-ai-component.component';
 
-describe('PromptAiComponentComponent', () => {
-  let component: PromptAiComponentComponent;
-  let fixture: ComponentFixture<PromptAiComponentComponent>;
+describe('PromptAiComponent', () => {
+  let component: PromptAiComponent;
+  let fixture: ComponentFixture<PromptAiComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PromptAiComponentComponent ],
+      declarations: [ PromptAiComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PromptAiComponentComponent);
+    fixture = TestBed.createComponent(PromptAiComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

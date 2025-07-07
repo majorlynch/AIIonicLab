@@ -1,39 +1,69 @@
+import { ApiKeysService } from './api-keys.service';
 import { environment } from '@environment/environment';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { GenerateContentResponse, GoogleGenAI } from '@google/genai';
 import { OpenAI } from 'openai';
 import { Mistral } from '@mistralai/mistralai';
 import { MockChatService } from './mocks/mock-chat-service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { AI_KEYS } from '@enums/ainame.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PromptService {
+  apiKeyGemini: string = '';
+  apiKeyDeepSeek: string = '';
+  apiKeyMistral: string = '';
+  apiKeyChatGPT: string = '';
 
   //Gemini
-  geminiAI = new GoogleGenAI({
-    apiKey: environment.apiKeyGemini,
-  });
+  geminiAI: GoogleGenAI | null = null;
 
   //Deepseek
-  deepseekAI = new OpenAI({
-    baseURL: 'https://api.deepseek.com',
-    dangerouslyAllowBrowser: true,
-    apiKey: environment.apiKeyDeepSeek
-  });
-
-  //ChatGPT
-  private chatpGPTApiUrl = 'https://api.openai.com/v1/chat/completions';
+  deepseekAI: OpenAI | null = null;
 
   //Mistral
-  mistralAI = new Mistral({apiKey: environment.apiKeyMistral});
+  mistralAI:  Mistral | null = null;
+
+  //ChatGPT
+  //private chatpGPTApiUrl = 'https://api.openai.com/v1/chat/completions';
+
+
 
   constructor(private http: HttpClient,
-              private mockChatService: MockChatService) {}
+              private apiKeysService:ApiKeysService,
+              private mockChatService: MockChatService) {
+    this.apiKeysService.getApiKeys().subscribe((keys) => {
+      if (keys) {
+        this.apiKeyGemini = keys[AI_KEYS.GEMINI];
+        this.apiKeyDeepSeek = keys[AI_KEYS.DEEPSEEK];
+        this.apiKeyMistral = keys[AI_KEYS.MISTRAL];
+        this.apiKeyChatGPT = keys[AI_KEYS.CHATGPT];
+      }
+      //Gemini
+        this.geminiAI = new GoogleGenAI({
+          apiKey: this.apiKeyGemini,
+        });
+
+        //DeepSeek
+        this.deepseekAI = new OpenAI({
+          baseURL: 'https://api.deepseek.com',
+          dangerouslyAllowBrowser: true,
+          apiKey: this.apiKeyDeepSeek,
+        });
+
+        //Mistral
+        this.mistralAI = new Mistral({ apiKey: this.apiKeyMistral });
+    });
+  }
 
   async getGeminiResponsePromise(prompt: string): Promise<string | undefined> {
+    if (!this.geminiAI) {
+      console.log('Gemini AI not set');
+      return '';
+    }
     const response: GenerateContentResponse = await this.geminiAI.models.generateContent({
         model: 'gemini-2.0-flash',
         contents: prompt,
@@ -50,6 +80,10 @@ export class PromptService {
   }
 
   async getDeepSeekResponsePromise(prompt: string): Promise<string> {
+    if (!this.deepseekAI) {
+      console.log('Gemini AI not set');
+      return '';
+    }
     const response = await this.deepseekAI.chat.completions.create({
       messages: [{ role: "system", content: prompt }],
       model: "deepseek-chat"
@@ -65,11 +99,11 @@ export class PromptService {
       return this.mockChatService.getMockResponse();
   }
 
-
+/*
   getChatGPTResponse(prompt: string): Observable<Object> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${environment.apiKeyChatGPT}`,
+      Authorization: `Bearer ${this.apiKeyChatGPT}`,
     });
 
     const body = {
@@ -85,7 +119,7 @@ export class PromptService {
 
     return this.http.post(this.chatpGPTApiUrl, body, { headers });
   }
-/*
+
   getChatGPTResponse(prompt: string, returnMockText?: boolean): Observable<string> {
     if (!returnMockText)
       return from(this.getChatGPTResponsePromise(prompt));
@@ -95,6 +129,10 @@ export class PromptService {
 */
 
   async getMistralResponsePromise(prompt: string): Promise<string> {
+    if (!this.mistralAI) {
+      console.log('Gemini AI not set');
+      return '';
+    }
     const chatResponse = await this.mistralAI.chat.complete({
         model: "mistral-large-latest",
         messages: [{role: 'user', content: prompt}]

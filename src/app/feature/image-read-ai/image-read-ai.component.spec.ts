@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ImageReadAiComponentComponent } from './image-read-ai-component.component';
+import { ImageReadAiComponent } from './image-read-ai.component';
 
-describe('ImageReadAiComponentComponent', () => {
-  let component: ImageReadAiComponentComponent;
-  let fixture: ComponentFixture<ImageReadAiComponentComponent>;
+describe('ImageReadAiComponent', () => {
+  let component: ImageReadAiComponent;
+  let fixture: ComponentFixture<ImageReadAiComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImageReadAiComponentComponent ],
+      declarations: [ ImageReadAiComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ImageReadAiComponentComponent);
+    fixture = TestBed.createComponent(ImageReadAiComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

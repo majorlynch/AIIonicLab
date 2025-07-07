@@ -49,8 +49,6 @@
         </ion-card>
       </ion-col>
 
-      <!-- Repeat the same block with DeepSeek, ChatGPT, Mistral -->
-
       <ion-col size="12" sizeMd="3" *ngIf="featureFlags.Deepseek">
         <ion-card>
           <ion-card-header>
@@ -71,7 +69,26 @@
         </ion-card>
       </ion-col>
 
-      <!-- Continue with ChatGPT and Mistral in the same format -->
+            <ion-col size="12" sizeMd="3" *ngIf="featureFlags.Mistral">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <img class="aiImage" src="/assets/images/mistral.png" />
+              Mistral AI Response <span class="fs-3">{{medalArray[mistralPosition]}}</span>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ng-container>
+              <ion-label *ngIf="!aiMistralResponse">Response</ion-label>
+              <p [innerHTML]="aiMistralResponse" style="white-space: pre-wrap;"></p>
+            </ng-container>
+            <ng-template #loadingMistral>
+              <ion-spinner name="crescent"></ion-spinner>
+            </ng-template>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
     </ion-row>
   </ion-grid>
 </ion-content>
