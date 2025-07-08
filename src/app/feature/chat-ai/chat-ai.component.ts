@@ -108,7 +108,7 @@ export class ChatAiComponent implements AfterViewChecked, DoCheck {
         .map((r) => ({ text: r.messageDetail }));
 
       this.chatService
-        .getGeminiChat(this.chatPrompt, userHistory, aiHistory)
+        .getGeminiChat(this.chatPrompt, userHistory, aiHistory, true)
         .pipe(
           catchError((error) => {
             if (error.status === 0)

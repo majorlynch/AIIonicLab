@@ -29,7 +29,7 @@ dy{
     height: 40px;
     position: absolute;
 }
-.chat .avatar img {
+.chat .avatar ion-img {
     display: block;
     border-radius: 20px;
     height: 100%;

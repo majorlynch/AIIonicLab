@@ -1,11 +1,13 @@
-<ion-item>
-  <ion-textarea
-    [(ngModel)]="chatPrompt"
-    placeholder="Write a message"
-    aria-label="Recipient's username">
-  </ion-textarea>
-</ion-item>
-<ion-item lines="none" class="ion-padding-top">
+<ion-item lines="none" class="ion-align-items-center">
+
+  
+    <ion-textarea
+      [(ngModel)]="chatPrompt"
+      placeholder="Write a message"
+      aria-label="Recipient's username">
+    </ion-textarea>
+
+    
   <ion-select interface="popover" placeholder="😀">
     <ion-select-option *ngFor="let group of chatSymbolGroups">
       <div class="d-flex flex-wrap gap-2">
@@ -24,6 +26,7 @@
     <ion-button
     id="sendMessageButton"
     fill="outline"
+    expand="rounded"
     [disabled]="isChatLoading"
     (click)="sendInput()"
   >

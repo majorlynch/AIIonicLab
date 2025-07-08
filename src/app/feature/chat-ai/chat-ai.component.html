@@ -1,37 +1,22 @@
-<ion-content>
-  <ion-grid>
+<ion-content fullscreen>
+  <ion-grid size="12">
     <ion-row>
-      <!-- Mobile Contact List -->
-      <ion-col size="12" class="ion-hide-md-up">
-        <app-chat-contacts
-          [selectedAI]="selectedAI!.aiName"
-          (setSelectedAi)="setSelectedAi($event)"
-        ></app-chat-contacts>
-      </ion-col>
-
-      <!-- Desktop Contact List -->
-      <ion-col size="3" class="ion-hide-sm-down">
-        <app-chat-contacts
-          [selectedAI]="selectedAI!.aiName"
-          (setSelectedAi)="setSelectedAi($event)"
-        ></app-chat-contacts>
-      </ion-col>
+      <app-chat-contacts [selectedAI]="selectedAI!.aiName"
+          (setSelectedAi)="setSelectedAi($event)">
+      </app-chat-contacts>
+    </ion-row>
+    <ion-row>
 
       <!-- Chat Panel -->
-      <ion-col size="9">
+      <ion-col class="chat" size="12">
         <!-- Error Alert -->
-        <ion-alert
-          *ngIf="errorMessage"
-          header="Error"
-          message="{{ errorMessage }}"
-          buttons="{[
+        <ion-alert *ngIf="errorMessage" header="Error" message="{{ errorMessage }}" buttons="{[
             {
               text: 'Close',
               role: 'cancel',
               handler: () => closeErrorMessage()
             }
-          ]}"
-        ></ion-alert>
+          ]}"></ion-alert>
 
         <!-- Chat Body -->
         <div id="chatBody" class="chat-body">
@@ -40,23 +25,17 @@
           </ion-text>
 
           <div *ngFor="let message of displayMessages">
-            <div
-              class="answer"
-              [ngClass]="{
+            <div class="answer imagecontainer" [ngClass]="{
                 left: message.userType === 'assistant',
                 right: message.userType === 'user'
-              }"
-            >
-              <div class="avatar">
-                <ion-img [src]="message.userImage" alt=""></ion-img>
+              }">
+              <div class="avatar" style="text-align: right">
+                <!--<img src="{{ message.userImage }}" alt="" />-->
+                <ion-img [src]="message.userImage" class="aiImage" alt=""></ion-img>
                 <div class="status {{ message.userStatus }}"></div>
               </div>
               <div class="name">{{ message.userName }}</div>
-              <div
-                class="text"
-                [innerHTML]="message.messageDetail"
-                style="white-space: pre-wrap"
-              ></div>
+              <div class="text" [innerHTML]="message.messageDetail" style="white-space: pre-wrap"></div>
               <div class="time">{{ message.messageTimeText }}</div>
             </div>
           </div>
@@ -64,14 +43,11 @@
           <!-- Loading Spinner -->
           <ion-spinner *ngIf="isChatLoading" name="dots"></ion-spinner>
         </div>
-
-        <!-- Chat Input Component -->
-        <app-chat-input
-          [chatPrompt]="chatPrompt"
-          [isChatLoading]="isChatLoading"
-          (sendMessage)="sendMessage($event)"
-        ></app-chat-input>
       </ion-col>
+    </ion-row>
+    <ion-row>
+      <!-- Chat Input Component -->
+      <app-chat-input [chatPrompt]="chatPrompt" [isChatLoading]="isChatLoading" (sendMessage)="sendMessage($event)" />
     </ion-row>
   </ion-grid>
 </ion-content>
