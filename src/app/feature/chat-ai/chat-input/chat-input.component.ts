@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CHATSYMBOLGROUPS } from '@constants/chatSymbols';
+import { sendOutline} from 'ionicons/icons';
+import { addIcons } from 'ionicons';
 import { IonItem, IonTextarea, IonSelect, IonSelectOption, IonButton, IonIcon } from '@ionic/angular/standalone';
 
 @Component({
@@ -19,6 +21,7 @@ export class ChatInputComponent {
   chatSymbolGroups:string[][];
 
   constructor() {
+    addIcons({ sendOutline });
     this.chatSymbolGroups = CHATSYMBOLGROUPS;
   }
 

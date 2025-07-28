@@ -5,10 +5,10 @@
           (setSelectedAi)="setSelectedAi($event)">
       </app-chat-contacts>
     </ion-row>
-    <ion-row>
+    <ion-row  class="chat">
 
       <!-- Chat Panel -->
-      <ion-col class="chat" size="12">
+      <ion-col size="12">
         <!-- Error Alert -->
         <ion-alert *ngIf="errorMessage" header="Error" message="{{ errorMessage }}" buttons="{[
             {
@@ -29,11 +29,11 @@
                 left: message.userType === 'assistant',
                 right: message.userType === 'user'
               }">
-              <div class="avatar" style="text-align: right">
+              <ion-avatar class="avatar" style="text-align: right">
                 <!--<img src="{{ message.userImage }}" alt="" />-->
                 <ion-img [src]="message.userImage" class="aiImage" alt=""></ion-img>
                 <div class="status {{ message.userStatus }}"></div>
-              </div>
+              </ion-avatar>
               <div class="name">{{ message.userName }}</div>
               <div class="text" [innerHTML]="message.messageDetail" style="white-space: pre-wrap"></div>
               <div class="time">{{ message.messageTimeText }}</div>

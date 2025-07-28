@@ -1,10 +1,9 @@
+const baseUrl= 'https://madebyconor.com/';
+
 export const environment = {
     production: false,
-    apiKeyUrl: 'https://madebyconor.com/ailab/apikey/',
-    apiKeyGemini: '',//process.env["API_KEY_GEMINI"] || '${{env.API_KEY_GEMINI}}',
-    apiKeyDeepSeek: '',//process.env["API_KEY_DEEPSEEK"] || '${{env.API_KEY_DEEPSEEK}}',
-    apiKeyMistral: '',//process.env["API_KEY_MISTRAL"] || '${{env.API_KEY_MISTRAL}}',
-    apiKeyChatGPT: '',//process.env["API_KEY_CHATGPT"] || '${{env.API_KEY_CHATGPT}}',
+    baseUrl: baseUrl,
+    apiKeyUrl: baseUrl + 's1/apikey/',
     featureFlags: {
       Gemini: true,
       Deepseek: true,
